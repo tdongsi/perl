@@ -5,7 +5,7 @@ use warnings;
 use Exporter;
 
 our @ISA = qw( Exporter );
-our @EXPORT = qw( absolutePath is_folder_empty fileExists findBootfile runCommand );
+our @EXPORT = qw( absolutePath is_folder_empty fileExists fileSizes findBootfile runCommand );
 
 
 # Return the OS-compatible absolute path to a file (i.e. correct backslash/forward slash)
@@ -42,6 +42,26 @@ sub fileExists
      my @arr = glob($fileNameAndPath);
      my $containerFileExists = scalar @arr;
      return $containerFileExists;
+}
+
+
+# Get the file sizes in byte with the given path and file name (wildcards allowed)
+# INPUT: file name and path, including wild cards.
+# OUTPUT: array of the file sizes in bytes
+sub fileSizes
+{
+	my ($fileNameAndPath) = @_;
+	# use qq to guard against spacey file paths
+	my @files = glob qq($fileNameAndPath);
+	my @sizes;
+	
+	foreach my $i (0..$#files)
+	{
+		$sizes[$i] = -s $files[$i];
+		# print "$files[$i]\n size: $sizes[$i]\n";
+	}
+	
+	return @sizes;
 }
 
 
