@@ -16,3 +16,7 @@ Script to search and replace a certain line in a file.
 
 recordParameter.pl:
 Script to repeatedly call a (monitor) program and grab a line of interest, such as a parameter.
+
+Perl2CppComment.pl
+correctComment.pl
+Scripts to convert Perl-style comment to C++ style comment.
