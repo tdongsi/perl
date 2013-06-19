@@ -1,0 +1,9 @@
+zipFolders.bat: 
+a batch script that zips all folders in the current directory.
+Need 7-zip installed and the path to 7-zip specified in the script.
+
+checkClassPath.pl:
+Count the number of duplicate paths in some environment variable.
+
+findText.pl:
+To find a line that contain some matching string.

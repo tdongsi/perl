@@ -5,7 +5,7 @@ use warnings;
 use Exporter;
 
 our @ISA = qw( Exporter );
-our @EXPORT = qw( absolutePath is_folder_empty fileExists );
+our @EXPORT = qw( absolutePath is_folder_empty fileExists findBootfile runCommand );
 
 
 # Return the OS-compatible absolute path to a file (i.e. correct backslash/forward slash)
@@ -42,4 +42,68 @@ sub fileExists
      my @arr = glob($fileNameAndPath);
      my $containerFileExists = scalar @arr;
      return $containerFileExists;
+}
+
+
+# Find the (only) file of the given type in the given directory
+# USAGE: $bootfileName = findBootfile( $dir )
+# INPUT:
+# $dir: the given directory
+# OUTPUT:
+# $bootfileName: the file path if there is only one, "" if 0 or > 1 files found with .boot extension
+sub findBootfile {
+	my ($dir, $suffix) = @_;
+	my $count    = 0;
+	my $filename = "";
+
+	opendir DH, $dir or die "Cannot open $dir: $!";
+	foreach my $file ( readdir DH ) {
+		if ( $file =~ m/\.$suffix$/ ) {
+			$count++;
+			$filename = $file;
+		}
+	}
+
+	# Optional: check if it is the only file
+	if ( $count == 1 ) {
+		return "$dir/$filename";
+	}
+	else {
+		return "";
+	}
+}
+
+
+# Subroutine to simulate Windows batch call
+# USAGE: ($output, $errorlevel) = runCommand( $command, $verbose, $echo);
+# INPUT:
+# command: the system commands to be executed
+# verbose: print the output
+# echo: print the command
+# OUTPUT:
+# output: screen output as string
+# errorlevel: integer return of the system command call.
+sub runCommand
+{
+	my($command, $verbose, $echo) = @_;
+	
+	if ($echo)
+	{
+		print "> $command\n";
+	}
+	
+	# NOTE: the verbose option could not stop error messages from being printed out.
+	# my $output = `$command`;
+	my $output = `$command 2>&1`;
+	my $errorlevel = $?;
+	
+	# Only print when there is no error
+	if ( $verbose )
+	{
+		print "$output\n";
+	}
+	
+	warn "\n\n\nERROR: Error executing command: $command. Returns $errorlevel\n\n\n" if $errorlevel;
+	
+	return ($output,$errorlevel);
 }
