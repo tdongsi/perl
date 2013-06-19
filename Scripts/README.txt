@@ -7,3 +7,6 @@ Count the number of duplicate paths in some environment variable.
 
 findText.pl:
 To find a line that contain some matching string.
+
+cvsCommit.pl:
+Some scripts to commit multiple files across multiple folders to CVS.
