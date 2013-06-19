@@ -7,7 +7,7 @@ use Exporter;
 our @ISA = qw( Exporter );
 our @EXPORT = qw( allSubstrings randomString randomValidName reportProgress
 					wordWrap trim RemoveSomeLinesInFile
-					removePath removeSubstring replaceStringInFile );
+					removePath removeSubstring replaceStringInFile convertStringToSize);
 
 # subroutine for trimming lines
 sub trim($)
@@ -17,6 +17,27 @@ sub trim($)
      $string =~ s/\s+$//;
      return $string;
 }
+
+
+# Convert the size string such as "1024k", "2g" into the numerical size in bytes.
+sub convertStringToSize
+{
+	my ($sizeString) = @_;
+	my %sizeHash = ( 'k' => 1024, 'm' => 1024*1024, 'g' => 1024*1024*1024 );
+	
+	my $number = substr $sizeString, 0, length($sizeString) -1;
+	my $suffix = lc (substr $sizeString, -1);
+	# print "number: $number suffix: $suffix\n";
+	
+	if ( !$sizeHash{$suffix} )
+	{
+		die "Undefined suffix";
+	}
+	
+	return $number * $sizeHash{$suffix};
+}
+
+
 
 # Return a list of all substrings from a string and its minimum length
 # Ver 0.2: all substrings in both normal and upper cases
