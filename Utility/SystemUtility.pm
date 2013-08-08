@@ -127,3 +127,41 @@ sub runCommand
 	
 	return ($output,$errorlevel);
 }
+
+# Subroutine to cleanup files extracted from a zip file
+# INPUT:
+# ZipFile: the name of the zip file
+sub CleanUpZip
+{ 
+	my ($ZipFile) = @_;
+	print "Deleting $ZipFile and all its associated files\n";
+	
+	#create temp file to store list of files in Zip
+	my $ListOfFiles = "ListOfFiles.txt";
+	system("unzip -l $ZipFile > $ListOfFiles");
+	open(PROCESS, "$ListOfFiles")  || die "Could not find $ZipFile!: $!"; 
+	my @ZipLines = <PROCESS>;
+	close(PROCESS);
+
+	foreach my $line (@ZipLines) 
+	{
+		# E.g. line: 374  02-02-10 11:24   Filename.h
+		$line = trim($line);
+		my ($length, $date, $time, $ZipFilePath) = split(/\s+/, $line);
+		#delete file in zip
+		if( -e "$ZipFilePath" || -d "$ZipFilePath" )
+		{
+			unlink($ZipFilePath);
+		}
+		#check current working directory for zip file if can't find it (in case user junks path with j)
+		elsif ($ZipFilePath =~ /^[A-Za-z0-9_]/ )
+		{
+			my($ZipFileName, $ZipFileDirPath) = fileparse($ZipFilePath);
+			unlink($ZipFileName);
+		}
+	}
+	
+	#cleanup actual zip and temp file after finishing processing
+	unlink($ZipFile);
+	unlink($ListOfFiles);
+} 
