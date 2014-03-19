@@ -5,7 +5,8 @@ use warnings;
 use Exporter;
 
 our @ISA = qw( Exporter );
-our @EXPORT = qw( absolutePath is_folder_empty fileExists fileSizes findBootfile runCommand );
+our @EXPORT = qw( absolutePath is_folder_empty fileExists fileSizes findBootfile runCommand 
+	CleanUpZip fileToArray);
 
 
 # Return the OS-compatible absolute path to a file (i.e. correct backslash/forward slash)
@@ -165,3 +166,13 @@ sub CleanUpZip
 	unlink($ZipFile);
 	unlink($ListOfFiles);
 } 
+
+# Read text file into array of text lines.
+sub fileToArray
+{
+	my ($filename) = @_;
+	open FILE, "< $filename" or die "Cannot open file $filename: $!";
+	my @lines = <FILE>;
+	close FILE;
+	return @lines;
+}
