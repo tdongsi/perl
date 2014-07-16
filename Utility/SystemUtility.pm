@@ -176,3 +176,84 @@ sub fileToArray
 	close FILE;
 	return @lines;
 }
+
+
+# Filter the file. Filtering logic is defined by implementation
+# INPUT:
+# $beforeFile: string of input file name
+# $afterFile: string of output file name, after filtering
+# OUTPUT:
+# No output. If success, a new file is created with filtered content, named as specified.
+sub filterFile
+{
+	my ($beforeFile, $afterFile) = @_;
+	
+	open INFILE, "<", $beforeFile or die "Cannot open $beforeFile: $!";
+	my @lines = <INFILE>;
+	close INFILE;
+	
+	# print "DEBUG: Number of lines -1: $#lines\n";
+	
+	open OUTFILE, ">", $afterFile or die "Cannot open $afterFile: $!";
+	
+	foreach my $line (@lines)
+	{
+		print OUTFILE $line unless 
+		# Add filtering logic to HERE
+		# Any line that satisfies the conditions will be ignored
+		# These are examples
+			($line =~ m/#size = .+/ or
+			$line =~ m/#hashValue = .+/);
+	}
+	
+	close OUTFILE;
+}
+
+# Check file after filtering content
+# INPUT:
+# $beforeFile: string of file name before 
+# $afterFile: string of file name after
+# OUTPUT:
+# Return 0 if the files are consistent.
+sub checkFile
+{
+	my ($beforeFile, $afterFile) = @_;
+	
+	my $trimBefore = "trim_$beforeFile";
+	filterFile( $beforeFile, $trimBefore );
+	my $trimAfter = "trim_$afterFile";
+	filterFile( $afterFile, $trimAfter );
+	
+	# diff the files after filtering
+	my $value = system("diff $trimBefore $trimAfter");
+	unlink $trimBefore;
+	unlink $trimAfter;
+	
+	return $value;
+}
+
+# Check file after filtering content.
+# INPUT:
+# $beforeFile: string of file name before 
+# $afterFile: string of file name after
+# $rFilter: reference to your filter implementation. Default to filterFile. Must follow filterFile behavior.
+# OUTPUT:
+# Return 0 if the files are consistent.
+sub checkFileRef
+{
+	my ($beforeFile, $afterFile, $rFilter) = @_;
+	$rFilter = \&filterFile;
+	
+	my $trimBefore = "trim_$beforeFile";
+	&$rFilter( $beforeFile, $trimBefore );
+	my $trimAfter = "trim_$afterFile";
+	&$rFilter( $afterFile, $trimAfter );
+	
+	# diff the files after filtering
+	my $value = system("diff $trimBefore $trimAfter");
+	unlink $trimBefore;
+	unlink $trimAfter;
+	
+	return $value;
+}
+

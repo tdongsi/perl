@@ -12,3 +12,9 @@ chdir "Samples" or warn "Cannot change directory: $!";
 ($output, $errorlevel) = &runCommand( "javac HelloWorld.java" ,VERBOSE_FLAG,ECHO_FLAG);
 ($output, $errorlevel) = &runCommand( "java -cp . HelloWorld" ,VERBOSE_FLAG,ECHO_FLAG);
 chdir '..' or warn "Cannot change directory to the archive home: $!";
+
+# Assume that you have two existing files for consistency check
+my $before = 'before.txt';
+my $after = 'after.txt';
+print checkFile( $before, $after );
+print checkFileRef( $before, $after );
