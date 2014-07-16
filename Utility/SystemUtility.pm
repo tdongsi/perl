@@ -6,7 +6,7 @@ use Exporter;
 
 our @ISA = qw( Exporter );
 our @EXPORT = qw( absolutePath is_folder_empty fileExists fileSizes findBootfile runCommand 
-	CleanUpZip fileToArray);
+	CleanUpZip fileToArray filterFile checkFile checkFileRef);
 
 
 # Return the OS-compatible absolute path to a file (i.e. correct backslash/forward slash)
