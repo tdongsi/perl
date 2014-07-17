@@ -225,7 +225,12 @@ sub checkFile
 	filterFile( $afterFile, $trimAfter );
 	
 	# diff the files after filtering
-	my $value = system("diff $trimBefore $trimAfter");
+	my $command = "diff $trimBefore $trimAfter";
+	print "+ $command\n";
+	my $output = `$command 2>&1`;
+	my $value = $?;
+	# print "DEBUG: $value\n";
+	print "DIFF: $output\n" unless $value eq 0;
 	unlink $trimBefore;
 	unlink $trimAfter;
 	
@@ -250,7 +255,12 @@ sub checkFileRef
 	&$rFilter( $afterFile, $trimAfter );
 	
 	# diff the files after filtering
-	my $value = system("diff $trimBefore $trimAfter");
+	my $command = "diff $trimBefore $trimAfter";
+	print "+ $command\n";
+	my $output = `$command 2>&1`;
+	my $value = $?;
+	# print "DEBUG: $value\n";
+	print "DIFF: $output\n" unless $value eq 0;
 	unlink $trimBefore;
 	unlink $trimAfter;
 	
