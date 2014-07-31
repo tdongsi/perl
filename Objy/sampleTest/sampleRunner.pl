@@ -70,13 +70,15 @@ sub runCommand
 
 sub pause
 {
-	print "Press any key to continue...\n";
-	if ( $^O eq 'MSWin32' )
-	{
-		&runCommand( "pause", 0,0);
-	} else {
-		&runCommand( "read -p \"Press any key\"", 0,0);
-	}
+	# Unattended mode
+	
+	# print "Press any key to continue...\n";
+	# if ( $^O eq 'MSWin32' )
+	# {
+		# &runCommand( "pause", 0,0);
+	# } else {
+		# &runCommand( "read -p \"Press any key\"", 0,0);
+	# }
 }
 
 # INPUT:
