@@ -23,9 +23,9 @@ foreach my $line (@lines)
 	# $line =~ s#qadir\.host1 .+#qadir.host1 = $cwd/intelnt#;
 	# $line =~ s#objydir\.host1 .+#objydir.host1 = Y:/release/R11_2_0#;
 	
-	$line =~ s#host\.host1 .+#host.host1 = rh5x64#;
-	$line =~ s#qadir\.host1 .+#qadir.host1 = $cwd/linux86_64#;
-	$line =~ s#objydir\.host1 .+#objydir.host1 = /dist/objydev#;
+	$line =~ s#host\.host1 .+#host.sparc64.host1 = sunflare#;
+	$line =~ s#qadir\.host1 .+#qadir.host1 = $cwd/sparc64#;
+	$line =~ s#objydir\.host1 .+#objydir.host1 = /dist/sparc64_objydev#;
 	
 	print OUT "$line\n";
 }
